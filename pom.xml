@@ -109,7 +109,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.25</version>
         </dependency>
         <!-- swagger-spring-boot 这一个依赖就等于之前swagger中的两个依赖 -->
         <dependency>
