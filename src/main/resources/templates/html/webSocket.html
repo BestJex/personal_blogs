@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebSocket测试</title>
+</head>
+<script>
+    var socket = null;
+    if (typeof (WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    } else {
+        console.log("您的浏览器支持WebSocket");
+    }
+
+    function lianjie() {
+
+        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+        if (socket == null) {
+            socket = new WebSocket("ws://localhost/websocket/20");
+            //打开事件
+            socket.onopen = function () {
+                console.log("Socket 已打开");
+                // socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function (msg) {
+                console.log(msg.data);
+                //发现消息进入    开始处理前端触发逻辑
+            };
+            //关闭事件
+            socket.onclose = function () {
+                console.log("后端Socket已关闭");
+            };
+            //发生了错误事件
+            socket.onerror = function () {
+                alert("Socket发生了错误");
+                //此时可以尝试刷新页面
+            }
+        } else {
+            alert("目前已有连接,不能重复连接!");
+        }
+    }
+
+    function duankai() {
+        console.log("前端Socket与后端已断开");
+        socket.close();
+        socket = null;
+    }
+
+</script>
+<body>
+<input type="button" value="连接" onclick="lianjie()">
+<input type="button" value="断开" onclick="duankai()">
+</body>
+</html>

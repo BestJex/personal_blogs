@@ -1,0 +1,53 @@
+body {
+    background-color:#E6E6FA;
+}
+
+.center-center > th{
+    text-align: center;
+}
+
+.center-left > p {
+    text-align: left;
+}
+
+.center-leftone {
+    text-align: left;
+}
+
+.center-right {
+    text-align: right;
+}
+
+.border {
+    border-width: 2px;
+}
+
+.calendar {
+    width: 45%;
+}
+
+.location {
+    position: absolute;
+    margin-top: 5px;
+    top:-5px;
+    left:50%;
+}
+
+.fontSize > th {
+    font-size: 12px;
+}
+
+#margin {
+    margin-top: 15px;
+}
+
+#city {
+    width: 8%;
+    vertical-align: middle;
+}
+
+
+
+
+
+

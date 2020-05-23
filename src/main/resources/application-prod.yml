@@ -1,0 +1,183 @@
+server:
+  port: 80
+spring:
+  application:
+    name: blogs
+  data:
+    mongodb:
+      uri: mongodb://admin:123@xxx.xxx.xxx.xxx:27017/admin
+
+# 配置目前存在问题 ES !!!
+#    elasticsearch:
+#      cluster-name: myes  # 集群名称
+#      cluster-nodes: xxx.xxx.xxx.xxx:9300  # 集群地址
+
+  datasource:
+    database-mysql:
+      type: com.alibaba.druid.pool.DruidDataSource
+      jdbc-url: jdbc:mysql://xxx.xxx.xxx.xxx:3306/blog?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: root
+      initial-size: 5  # 配置初始化大小/最小/最大
+      min-idle: 5
+      max-active: 100
+      max-wait: 60000  # 获取连接等待超时时间
+      min-evictable-idle-time-millis: 300000
+      pool-prepared-statements: true  # 打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    database-postgresql:
+      type: com.alibaba.druid.pool.DruidDataSource
+      jdbc-url: jdbc:postgresql://xxx.xxx.xxx.xxx:5432/blogs
+      driver-class-name: org.postgresql.Driver
+      username: postgres
+      password: root
+      initial-size: 5
+      min-idle: 5
+      max-active: 100
+      max-wait: 60000
+      min-evictable-idle-time-millis: 300000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    database-oracle:
+      type: com.alibaba.druid.pool.DruidDataSource
+      jdbc-url: jdbc:oracle:thin:@xxx.xxx.xxx.xxx:1521:orcl
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      username: system
+      password: roots
+      initial-size: 5
+      min-idle: 5
+      max-active: 100
+      max-wait: 60000
+      min-evictable-idle-time-millis: 300000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+  redis:
+    database: 0  # Redis数据库索引（默认为0）
+    host: xxx.xxx.xxx.xxx
+    port: 6379
+    password:
+#      jedis:
+#        pool:
+#          max-wait: -1  # 连接池最大阻塞等待时间（使用负值表示没有限制）
+#          max-idle: 1000  # 连接池中的最大空闲连接
+#          min-idle: 100  # 连接池中的最小空闲连接
+#      ## 集群环境打开
+#      cluster:
+#        max-redirects: 1000  # 默认值是5 一般当此值设置过大时，容易报：Too many Cluster redirections
+#        nodes:
+#        - xxx.xxx.xxx.xxx:6379
+#        - xx.xxx.xxx.xxx:xxxx
+
+  #  kafka:
+  #    bootstrap-servers: 3xxx.xxx.xxx.xxx:9092  # 指定kafka server的地址, 集群配多个, 中间, 逗号隔开
+  #    producer:
+  #      # 写入失败时，重试次数。当leader节点失效，一个repli节点会替代成为leader节点，此时可能出现写入失败，
+  #      # 当retris为0时，produce不会重复。retirs重发，此时repli节点完全成为leader节点，不会产生消息丢失。
+  #      retries: 0
+  #      batch-size: 16384  # 每次批量发送消息的数量, produce积累到一定数据, 一次发送.
+  #      buffer-memory: 33554432  # produce积累数据一次发送, 换粗大小达到buffer.momory就发送数据
+  #      # procedure要求leader在考虑完成请求之前收到的确认数，用于控制发送记录在服务端的持久化，其值可以为如下：
+  #      # acks = 0 如果设置为零，则生产者将不会等待来自服务器的任何确认，该记录将立即添加到套接字缓冲区并视为已发送。在这种情况下，无法保证服务器已收到记录，并且重试配置将不会生效（因为客户端通常不会知道任何故障），为每条记录返回的偏移量始终设置为-1。
+  #      # acks = 1 这意味着leader会将记录写入其本地日志，但无需等待所有副本服务器的完全确认即可做出回应，在这种情况下，如果leader在确认记录后立即失败，但在将数据复制到所有的副本服务器之前，则记录将会丢失。
+  #      # acks = all 这意味着leader将等待完整的同步副本集以确认记录，这保证了只要至少一个同步副本服务器仍然存活，记录就不会丢失，这是最强有力的保证，这相当于acks = -1的设置。
+  #      # 可以设置的值为：all, -1, 0, 1
+  #      acks: 1
+  #      # 指定消息key和消息体的编解码方式
+  #      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+  #    consumer:
+  #      group-id: testGroup  # 指定默认消费者group id --> 由于在kafka中，同一组中的consumer不会读取到同一个消息，依靠groud.id设置组名
+  #      auto-offset-reset: earliest  # smallest和largest才有效，如果smallest重新0开始读取，如果是largest从logfile的offset读取。一般情况下我们都是设置smallest
+  #      enable-auto-commit: true  # enable.auto.commit:true --> 设置自动提交offset
+  #      auto-commit-interval: 100  # 如果'enable.auto.commit'为true，则消费者偏移自动提交给Kafka的频率（以毫秒为单位），默认值为5000。
+  #      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  rabbitmq:
+    ## 生产端
+    addresses: xxx.xxx.xxx.xxx:5672
+    username: guest
+    password: guest
+    virtual-host: /
+    connection-timeout: 15000
+    publisher-confirms: true  # 消息确认模式 - 实现一个监听器用于监听Broker端给我们返回的确认请求
+    publisher-returns: true  # 消息返回模式 - 保证消息堆Broker端是可达的, 如果出现路由键不可达的情况, 则使用监听器堆不可达的消息进行后续的处理, 保证消息的路由成功
+    template:
+      mandatory: true  # 注意: 再发送消息的时候堆template进行配置mandatory=true
+    ## 消费端
+    listener:
+      simple:
+        acknowledge-mode: manual  # 手动签收
+        concurrency: 5  # 初始化监听大小
+        max-concurrency: 10  # 最大监听大小
+  resources:
+    static-locations: classpath:/templates/
+  ## springBoot配置上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+
+swagger:
+  base-package: com.chengcheng.controller
+
+mybatis:
+  mapper-locations: classpath:mybatis/mybatis-mysql/*.xml, mybatis/mybatis-postgresql/*.xml, mybatis/mybatis-oracle/*.xml  # 映射配置文件
+  type-aliases-package: com.chengcheng.entity  # 别名扫描包
+  config-location: classpath:mybatis/mybatis-config.xml  # 配置文件路径
+#  configuration:  # 输出SQL执行语句
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  config: classpath:logback-spring.xml  # 日志配置文件
+  path: ./src/main/resources/logger/log  # 日志path路径配置
+
+## 分页相关配置
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  params: count=countSql
+#  returnPageInfo: check
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://xxx.xxx.xxx.xxx:9000/eureka/,http://xxx.xxx.xxx.xxx:8000/eureka/
+#  instance:
+#    prefer-ip-address: true  # 服务名以"IP地址:服务端口号"来显示
+#    instance-id: ${spring.cloud.client.ipaddress}:${server.port}
+#    lease-renewal-interval-in-seconds: 10000  # Eureka客户端向服务端发送心跳的时间间隔，单位为毫秒（客户端告诉服务端自己会按照该规则）
+#    lease-expiration-duration-in-seconds: 30000  # Eureka服务端在收到最后一次心跳之后等待的时间上限，单位为毫秒，超过则剔除（客户端告诉服务端按照此规则等待自己）
+#
+#zuul:
+#  host:
+#    connect-timeout-millis: 10000
+#    socket-timeout-millis: 60000
+#
+#feign:
+#  hystrix:
+#    enabled: true
+### 禁止（关闭）Hystrix服务超时时间
+#hystrix:
+#  command:
+#    default:
+#      execution:
+##        timeout:
+##          enabled: false
+#        isolation:  # 设置Hystrix服务超时时间
+#          thread:
+#            timeoutInMilliseconds: 10000
+#
+#ribbon:  # Ribbon的配置(Fegin和Zuul => 默认开启了Ribbon负载均衡)
+#  ReadTimeout: 5000  # 指的是建立连接所用的时间，适用于网络状况正常的情况下，两端连接所用的时间。
+#  ConnectTimeout: 5000  # 指的是建立连接后从服务器读取到可用资源所用的时间。

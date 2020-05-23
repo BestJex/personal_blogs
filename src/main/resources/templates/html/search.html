@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+
+    <script src="../static/js/jquery.js" charset="UTF-8"></script>
+    <script src="../static/js/bootstrap.min.js" charset="UTF-8"></script>
+    <title>知我所搜</title>
+    <script>
+        $(function () {
+            var old_ele = "";
+            $('#sub').on('click', function () {
+                var word = $('#inputGroupSuccess2').val();
+                var path = $('#exampleInputAmount').val();
+                var obj = $('input[type=checkbox]');
+                var add_type = $('#addType').val();
+                var check_val = "";
+                for (k in obj) {
+                    if (obj[k].checked) {
+                        check_val += obj[k].value + " ";
+                    }
+                }
+                check_val += add_type;
+                if (word.trim() === "" || path.trim() === "") {
+                    alert("关键词和路径不能为空");
+                    return;
+                }
+                $('#sub').attr("disabled", true).text("搜索中..");  // 按钮不可用
+                var url = "/search";
+                var datas = {
+                    "path": path,
+                    "array": word,
+                    "type": check_val
+                };
+                $.post(url, datas, function (data) {
+                    var ele = "<a href=\"" + data + "\" target=\"_blank\">" + "Search-Result: " + data.split('-')[1] + "</a></br>";
+                    old_ele += ele;
+                    $('#hre').html(old_ele);  // 赋值
+                    $('#sub').attr("disabled", false).text("搜索引擎");  // 按钮不可用
+                }).fail(function () {
+                    alert("搜索异常中断, 请缩小搜索路径范围后重试!");
+                    $('#sub').attr("disabled", false).text("搜索引擎");
+                });
+            });
+        });
+    </script>
+</head>
+<body style="background-color:#E6E6FA;">
+<div class="container text-center" id="margin" style="margin-top: 15px;">
+    <form class="form-horizontal">
+        <!-- 关键词搜索 S -->
+        <div class="form-group has-success has-feedback" style="padding-top: 8%;">
+            <h2 style="font-family: 幼圆;margin-bottom: 2%;">知我所搜</h2>
+            <div class="col-sm-9">
+                <div class="input-group" style="padding-left: 29%;">
+                    <span class="input-group-addon">🔍</span>
+                    <input type="text" class="form-control" id="inputGroupSuccess2" placeholder="关键词搜索 < 空格分隔 >">
+                </div>
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+            </div>
+            <button type="button" class=" col-sm-3 btn btn-primary" style="width: 10%;" id="sub">搜索引擎</button>
+        </div>
+        <!-- 关键词搜索 E -->
+        <!-- 类型选择 S -->
+        <div class="col-sm-7" style="margin-left: 17%;border-radius:15px;">
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline1" value="txt" checked> .txt
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline2" value="java" checked> .java
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline3" value="js" checked> .js
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline4" value="xls"> .xls
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline5" value="xlsx"> .xlsx
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline6" value="doc"> .doc
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline7" value="docx"> .docx
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline8" value="html"> .html
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline9" value="htm"> .htm
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline10" value="xml"> .xml
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline11" value="yml"> .yml
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline12" value="pom"> .pom
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline13" value="sql"> .sql
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline14" value="json"> .json
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" id="inline16" value="css"> .css
+            </label>
+            <label class="checkbox-inline">
+                <input type="text" class="form-control" id="addType" placeholder="手动添加 < 例: .java .js >">
+            </label>
+        </div>
+        <!-- 类型选择 E -->
+        <!-- 指定路径 S -->
+        <div class="col-sm-5" style="margin-top: 2%; margin-left: 28%;">
+            <div class="form-group">
+                <label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>
+                <div class="input-group">
+                    <div class="input-group-addon">知我所搜</div>
+                    <input type="text" class="form-control" id="exampleInputAmount" placeholder="搜索路径">
+                </div>
+            </div>
+        </div>
+        <!-- 指定路径 E -->
+    </form>
+    <!-- 文件下载 S -->
+    <div class="col-sm-12">
+        <hr style="width: 70%; background-color: black;height: 1px;">
+        <h4 style="font-family: 幼圆;margin-bottom: 2%;">知我所搜 - 搜索结果</h4>
+        <div class="col-sm-12" id="hre"></div>
+    </div>
+    <!-- 文件下载 E -->
+</div>
+</body>
+</html>

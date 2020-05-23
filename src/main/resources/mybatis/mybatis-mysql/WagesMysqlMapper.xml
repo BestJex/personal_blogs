@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengcheng.dao.mysqlDao.WagesDao">
+
+    <!-- 基本数据展示 -->
+    <select id="selectWagesAll" resultType="com.chengcheng.entity.Wages">
+        SELECT tab.usr AS usr, tab.date AS date, tab.many AS many
+    FROM (
+        SELECT ws.USER AS usr, ws.wages_date AS date, ws.wages_sum AS many
+        FROM wages ws
+        WHERE SUBSTRING(ws.wages_date, 1, 4) = #{wagesDate}
+        UNION ALL
+        SELECT MAX(w.USER) AS usr, MAX(0) AS date
+            , SUM(w.wages_sum) AS many
+        FROM wages w
+        WHERE SUBSTRING(w.wages_date, 1, 4) = #{wagesDate}
+        GROUP BY USER
+    ) tab
+    ORDER BY tab.usr ASC, CAST(SUBSTRING(tab.date, 6, 2) AS SIGNED) ASC;
+    </select>
+
+</mapper>
